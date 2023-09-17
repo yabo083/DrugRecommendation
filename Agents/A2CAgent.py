@@ -60,10 +60,6 @@ class A2CAgent:
         # next_states: (B, 11)
         # terminate_flags: (B,)
 
-        # 这里可以在DEBUG时增加一个断点，用来判断：
-        # 1. 各个输入数据的尺寸是否正确？比如action的尺寸时(B, 1)还是(B, )。
-        # 2. 各个输入数据的数值是否合理？比如states中是否偶然存在某些数值超过1000？
-
         # TD_target = r + gamma * V(s')
         # 这里的with torch.no_grad()表示在这个代码块里的运算是不需要保存梯度的
         # 因为这部分内容不参与梯度下降与参数更新
