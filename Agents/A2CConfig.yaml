@@ -1,0 +1,5 @@
+load_model: null
+gamma: 0.95
+epsilon: 0.5
+policy_lr: 0.0001
+value_lr: 0.001

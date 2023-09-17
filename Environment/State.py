@@ -10,6 +10,7 @@ class State:
 
     # 构造初始化函数
     def __init__(self, tensor: np.ndarray) -> None:
+        self.tensor = torch.Tensor(tensor)   # 直接将传入的张量数组赋值给tensor属性
         self.data = tensor  # 直接将传入的张量数组赋值给data属性
         # 将data中的数据变成list
         self.blood_sugar = self.data[0]
@@ -79,12 +80,12 @@ class State:
         return normalized_state
 
     @staticmethod
-    def make_batch(states: List["State"]) -> torch.Tensor:
+    def makeBatch(states: List["State"]) -> torch.Tensor:
         """
         将状态列表转换为batch，神经网络的输入需要接收形如(B, C, H, W)的张量，其中：
         B是batch size，C是channel，H是height，W是width
         :param states: 状态列表
-        :return: 状态的batch
+        :return: 状态的batch(B, 11)
         """
         return torch.stack([torch.Tensor([
             state.blood_sugar, state.blood_pressure, state.body_weight, state.HbA1c,
