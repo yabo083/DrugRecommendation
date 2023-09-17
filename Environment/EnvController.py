@@ -14,7 +14,7 @@ class EnvController:
         self.agent_model = AgentModel()  # 创建代理模型实例
 
         # 初始化随机状态
-        self._state = State(np.zeros((10, 10)))
+        self._state = State(np.zeros((11,)))
 
         # 记录上一次的状态、动作、奖励
         self.action: Action = None
@@ -23,6 +23,36 @@ class EnvController:
 
         self.t: int = 0  # 记录游戏的时间
         self.game_over = False
+
+        # 定义正常范围的下界和上界
+        # TODO:待做工作：根据实际情况修改正常范围的下界和上界，并标准化
+        self.lower_bound_state = State(np.array([
+            3.9,  # 血糖
+            90,  # 血压
+            50,  # 体重
+            4,  # 糖化血红蛋白
+            11,  # 糖化白蛋白
+            5,  # 胰岛素
+            0.8,  # C肽
+            0,  # 酮体
+            0.5,  # 乳酸/丙酮酸
+            2.8,  # 总胆固醇
+            0  # 尿微量白蛋白/肌酐
+        ]))
+
+        self.upper_bound_state = State(np.array([
+            6.1,  # 血糖
+            120,  # 血压
+            100,  # 体重
+            6,  # 糖化血红蛋白
+            17,  # 糖化白蛋白
+            25,  # 胰岛素
+            4.0,  # C肽
+            3,  # 酮体
+            1.5,  # 乳酸/丙酮酸
+            5.2,  # 总胆固醇
+            30  # 尿微量白蛋白/肌酐
+        ]))
 
     def reset(self):
         """
@@ -56,19 +86,6 @@ class EnvController:
         计算奖励
         :return: 返回奖励值
         """
-        normal_range = np.array([
-            [3.9, 6.1],  # 血糖
-            [90, 120],  # 血压
-            [50, 100],  # 体重
-            [4, 6],  # 糖化血红蛋白
-            [11, 17],  # 糖化白蛋白
-            [5, 25],  # 胰岛素
-            [0.8, 4.0],  # C肽
-            [0, 3],  # 酮体
-            [0.5, 1.5],  # 乳酸/丙酮酸
-            [2.8, 5.2],  # 总胆固醇
-            [0, 30]  # 尿微量白蛋白/肌酐
-        ])  # 正常范围
 
         if isinstance(self.state.data, memoryview):
             # 转换为np.ndarray
@@ -77,7 +94,8 @@ class EnvController:
             state_data = self.state.data
 
         # 计算normal_range的每个范围的平均值
-        normal_mean = np.mean(normal_range, axis=1)
+        # 根据正常范围的下界和上界计算normal_mean
+        normal_mean = (self.lower_bound_state.data + self.upper_bound_state.data) / 2
 
         mse_sum = np.sum((state_data - normal_mean) ** 2)  # 计算均方误差
 
@@ -112,4 +130,6 @@ if __name__ == '__main__':
 
     env_controller.step(Action.generate_combination())
 
-    print(env_controller)
+    print(env_controller.lower_bound_state)
+
+

@@ -62,6 +62,6 @@ class Action:
 
 
 if __name__ == '__main__':
-    actions = [Action.generate_combination() for _ in range(10)]
-    batch = Action.makeBatch(actions)
-    print(batch)
+    # 测试Action类
+    action = Action.generate_combination()
+    print(action)

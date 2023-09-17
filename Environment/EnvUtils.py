@@ -7,11 +7,17 @@ import numpy as np     # numpy库是非常强大的数学与数据处理库，�
 # CUDA是配套Nvidia显卡的工具，能够最大化利用Nvidia显卡的优势加速大量的计算，深度学习最好使用显卡加速
 import torch
 import matplotlib.pyplot as plt
+
+from dataclasses import dataclass
+from typing import List
+import numpy as np
+import torch
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 # typing是python的类型注释库，它可以帮助你给函数以及变量标注类型，使得你的项目更加清晰和可维护
 # 对于被标注了类型的变量，PyCharm可以更好地提供补全建议，因为它可以找到变量对应的类的定义
 from typing import *
-# cv2是计算机视觉处理库，因为我们的环境格式类似图像，同时我们还要有可视化，因此引入它
-import cv2
+
 
 # 这里定义一个类型别名叫RowCol，我将会把它用作一个包含行和列的2维向量，这里其实就是把numpy array另起了个名字
 RowCol = np.ndarray
